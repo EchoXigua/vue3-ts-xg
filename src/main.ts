@@ -4,6 +4,8 @@ import 'element-plus/dist/index.css'
 import xgRequest from './service'
 import App from './App.vue'
 
+import 'normalize.css'
+import './assets/css/base.less'
 import router from './router/index'
 import store from './store'
 
