@@ -11,7 +11,7 @@
         <el-input v-model="form.name" autocomplete="off" />
       </el-form-item>
       <el-form-item label="密码" prop="password">
-        <el-input v-model="form.password" type="password" autocomplete="off" />
+        <el-input v-model="form.password" show-password autocomplete="off" />
       </el-form-item>
     </el-form>
   </div>
@@ -20,19 +20,33 @@
 import { defineComponent, reactive, ref } from 'vue'
 import { rules } from '../config/acount-config'
 import type { FormInstance } from 'element-plus'
+import localCache from '@/utils/cache'
+import { useStore } from 'vuex'
+
 export default defineComponent({
   setup() {
+    //获取到store
+    const store = useStore()
     const form = reactive({
-      name: '',
-      password: ''
+      name: localCache.getCache('name'),
+      password: localCache.getCache('password')
     })
     const formRef = ref<FormInstance>()
 
-    const loginAction = () => {
-      console.log('立即登录')
+    const loginAction = (isKeepPassword: boolean) => {
       formRef.value?.validate((valid) => {
         if (valid) {
-          console.log('ok')
+          if (isKeepPassword) {
+            //记住密码，本地缓存
+            localCache.setCache('name', form.name)
+            localCache.setCache('password', form.password)
+          } else {
+            //不记住密码
+            localCache.deleteCache('name')
+            localCache.deleteCache('password')
+          }
+          //login模块里面的action
+          store.dispatch('login/accountLoginAction', { ...form })
         }
       })
     }
@@ -40,8 +54,8 @@ export default defineComponent({
     return {
       form,
       rules,
-      loginAction,
-      formRef
+      formRef,
+      loginAction
     }
   }
 })

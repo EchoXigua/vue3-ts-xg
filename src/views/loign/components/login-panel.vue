@@ -1,8 +1,8 @@
 <template>
   <div class="login-panel">
     <h1 class="title">后台管理系统</h1>
-    <el-tabs type="border-card" class="demo-tabs" stretch>
-      <el-tab-pane>
+    <el-tabs v-model="currentTab" type="border-card" class="demo-tabs" stretch>
+      <el-tab-pane name="account">
         <template #label>
           <span class="custom-tabs-label">
             <el-icon><User /></el-icon>
@@ -12,14 +12,14 @@
 
         <login-account ref="accountRef" />
       </el-tab-pane>
-      <el-tab-pane label="Config">
+      <el-tab-pane name="phone">
         <template #label>
           <span class="custom-tabs-label">
             <el-icon><Iphone /></el-icon>
             <span>手机登录</span>
           </span>
         </template>
-        <login-phone />
+        <login-phone ref="loginRef" />
       </el-tab-pane>
     </el-tabs>
     <div class="account-control">
@@ -39,13 +39,30 @@ import LoginPhone from './login-phone.vue'
 export default defineComponent({
   components: { User, Iphone, LoginAccount, LoginPhone },
   setup() {
+    //1.定义属性
     const isKeepPassword = ref(false)
     //初始值null 类型推导为null
     const accountRef = ref<InstanceType<typeof LoginAccount>>()
+    const loginRef = ref<InstanceType<typeof LoginPhone>>()
+    const currentTab = ref<string>('account')
+
+    //2.定义方法
     const handleLogin = () => {
-      accountRef.value?.loginAction()
+      if (currentTab.value === 'account') {
+        //账号密码登录
+        accountRef.value?.loginAction(isKeepPassword.value)
+      } else {
+        //手机号登录
+        loginRef.value?.loginAction()
+      }
     }
-    return { isKeepPassword, handleLogin, accountRef }
+    return {
+      isKeepPassword,
+      accountRef,
+      loginRef,
+      currentTab,
+      handleLogin
+    }
   }
 })
 </script>
@@ -66,17 +83,17 @@ export default defineComponent({
   width: 320px;
 }
 
-.demo-tabs > .el-tabs__content {
-  padding: 32px;
-  color: #6b778c;
-  font-size: 32px;
-  font-weight: 600;
-}
-.demo-tabs .custom-tabs-label .el-icon {
-  vertical-align: middle;
-}
-.demo-tabs .custom-tabs-label span {
-  vertical-align: middle;
-  margin-left: 4px;
-}
+// .demo-tabs > .el-tabs__content {
+//   padding: 32px;
+//   color: #6b778c;
+//   font-size: 32px;
+//   font-weight: 600;
+// }
+// .demo-tabs .custom-tabs-label .el-icon {
+//   vertical-align: middle;
+// }
+// .demo-tabs .custom-tabs-label span {
+//   vertical-align: middle;
+//   margin-left: 4px;
+// }
 </style>

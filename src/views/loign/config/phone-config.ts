@@ -3,7 +3,7 @@ export const rules = {
     {
       required: true,
       message: '手机号是必填内容',
-      trigger: ['blur', 'change']
+      trigger: 'blur'
     },
     {
       pattern: /^[0-9]{11}$/,
@@ -14,7 +14,7 @@ export const rules = {
     {
       required: true,
       message: '验证码是必填内容',
-      trigger: ['blur', 'change']
+      trigger: 'blur'
     },
     {
       pattern: /^[0-9]{6}$/,

@@ -3,7 +3,7 @@ export const rules = {
     {
       required: true,
       message: '用户名是必填内容',
-      trigger: ['blur', 'change']
+      trigger: 'blur'
     },
     {
       pattern: /^[a-z0-9]{5,10}$/,
@@ -14,7 +14,8 @@ export const rules = {
     {
       required: true,
       message: '密码是必填内容',
-      trigger: ['blur', 'change']
+      // trigger: ['blur', 'change']
+      trigger: 'blur'
     },
     {
       pattern: /^[a-z0-9]{6,}$/,

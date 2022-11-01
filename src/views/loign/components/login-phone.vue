@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-form
-      ref="ruleFormRef"
+      ref="formRef"
       :model="form"
       status-icon
       :rules="rules"
@@ -20,27 +20,35 @@
           <el-button type="primary" class="get-btn">获取验证码</el-button>
         </div>
       </el-form-item>
-      <el-form-item>
-        <el-button type="primary" @click="submitForm(ruleFormRef)"
-          >Submit</el-button
-        >
-        <el-button @click="resetForm(ruleFormRef)">Reset</el-button>
-      </el-form-item>
     </el-form>
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, reactive } from 'vue'
+import { defineComponent, reactive, ref } from 'vue'
 import { rules } from '../config/phone-config'
+import type { FormInstance } from 'element-plus'
+import { useStore } from 'vuex'
 export default defineComponent({
   setup() {
+    const store = useStore()
     const form = reactive({
       phone: '',
       password: ''
     })
+    const formRef = ref<FormInstance>()
+    const loginAction = () => {
+      formRef.value?.validate((valid) => {
+        if (valid) {
+          //login模块里面的action
+          store.dispatch('login/phoneLoginAction', { ...form })
+        }
+      })
+    }
     return {
       form,
-      rules
+      rules,
+      formRef,
+      loginAction
     }
   }
 })
