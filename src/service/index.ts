@@ -7,6 +7,10 @@ const xgRequest = new XGRequest({
   //这样做的好处是：每个XGRequest都可以有不同的配置，包括拦截器的配置
   interceptor: {
     requestInterceptor: (config) => {
+      // const token = ''
+      // if(token){
+      //   config.headers.Authorization = `Bearer ${token}`
+      // }
       console.log('请求成功的拦截')
       return config
     },
