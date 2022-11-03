@@ -1,5 +1,6 @@
 import XGRequest from './request/index'
 import { BASE_URL, TIME_OUT } from './request/config'
+import localeCache from '@/utils/cache'
 
 const xgRequest = new XGRequest({
   baseURL: BASE_URL,
@@ -7,11 +8,10 @@ const xgRequest = new XGRequest({
   //这样做的好处是：每个XGRequest都可以有不同的配置，包括拦截器的配置
   interceptor: {
     requestInterceptor: (config) => {
-      // const token = ''
-      // if(token){
-      //   config.headers.Authorization = `Bearer ${token}`
-      // }
-      console.log('请求成功的拦截')
+      const token = localeCache.getCache('token')
+      if (token) {
+        config!.headers!.Authorization = `Bearer ${token}`
+      }
       return config
     },
     requestInterceptorCatch: (err) => {

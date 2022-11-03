@@ -8,11 +8,14 @@ import 'normalize.css'
 import './assets/css/base.less'
 import router from './router/index'
 import store from './store'
+import { setupStore } from './store'
 
 const app = createApp(App)
 app.use(router)
 app.use(store)
 app.use(ElementPlus)
+setupStore()
+
 app.mount('#app')
 console.log(process.env.VUE_APP_TEST)
 
