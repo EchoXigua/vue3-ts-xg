@@ -27,8 +27,6 @@ const loginModule: Module<ILoginState, IRootState> = {
   },
   mutations: {
     changeToken(state, token: string) {
-      console.log(token)
-
       state.token = token
     },
     changeUserInfo(state, userInfo: any) {

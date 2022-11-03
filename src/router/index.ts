@@ -5,7 +5,7 @@ import localCache from '@/utils/cache'
 const routes = [
   {
     path: '/',
-    redirect: '/login'
+    redirect: '/main'
   },
   {
     path: '/login',
