@@ -2,56 +2,74 @@
   <div class="nav-menu">
     <div class="logo">
       <img src="~@/assets/logo.png" class="img" alt="logo" />
-      <div class="title">Vue3+TS</div>
+      <div v-show="!collapse" class="title">Vue3+TS</div>
     </div>
     <el-menu
       default-active="2"
+      :collapse="collapse"
       class="el-menu-vertical-demo"
-      @open="handleOpen"
-      @close="handleClose"
     >
-      <!-- <template v-for="item in userMenus"> </template> -->
-      <el-sub-menu index="1">
-        <template #title>
-          <el-icon><location /></el-icon>
-          <span>Navigator One</span>
+      <template v-for="item in userMenus" :key="item.id">
+        <!-- 二级菜单 -->
+        <template v-if="item.type == 1">
+          <!-- type == 1说明有子菜单 -->
+          <el-sub-menu :index="item.id + ''">
+            <template #title>
+              <i v-if="item.icon" :class="item.icon"></i>
+              <span>{{ item.name }}</span>
+            </template>
+            <template v-for="subItem in item.children" :key="subItem.id">
+              <el-menu-item :index="subItem.id + ''">
+                <i v-if="subItem.icon" :class="subItem.icon"></i>
+                <span>{{ subItem.name }}</span>
+              </el-menu-item>
+            </template>
+          </el-sub-menu>
         </template>
-        <el-menu-item-group title="Group One">
-          <el-menu-item index="1-1">item one</el-menu-item>
-          <el-menu-item index="1-2">item two</el-menu-item>
-        </el-menu-item-group>
-        <el-menu-item-group title="Group Two">
-          <el-menu-item index="1-3">item three</el-menu-item>
-        </el-menu-item-group>
-        <el-sub-menu index="1-4">
-          <template #title>item four</template>
-          <el-menu-item index="1-4-1">item one</el-menu-item>
-        </el-sub-menu>
-      </el-sub-menu>
-      <el-menu-item index="2">
-        <el-icon><icon-menu /></el-icon>
-        <span>Navigator Two</span>
-      </el-menu-item>
-      <el-menu-item index="3" disabled>
-        <el-icon><document /></el-icon>
-        <span>Navigator Three</span>
-      </el-menu-item>
-      <el-menu-item index="4">
-        <el-icon><setting /></el-icon>
-        <span>Navigator Four</span>
-      </el-menu-item>
+
+        <!-- 一级菜单 -->
+        <template v-else-if="item.type == 2">
+          <!-- 展示 -->
+          <el-menu-item index="2">
+            <i v-if="item.icon" :class="item.icon"></i>
+            <span>{{ item.name }}</span>
+          </el-menu-item>
+        </template>
+      </template>
     </el-menu>
   </div>
 </template>
 <script lang="ts">
+import { IRootState } from '@/store/type'
 import { defineComponent, computed } from 'vue'
-import { useStore } from 'vuex'
+//引用自己创建的useStore
+import { useStore } from '@/store/index'
+//vuex 对ts 兼容不太好
 
 export default defineComponent({
-  setup() {
+  props: {
+    collapse: {
+      type: Boolean,
+      default: false
+    }
+  },
+  setup(props) {
+    //useStore 可以接受一个泛型，用来约束store
     const store = useStore()
-    // const userMenus = computed(() => {})
-    return {}
+    // const userMenus = store.state.age
+    //vuex中这里去拿state对应的属性没问题，但是去那login这个模块
+    const userMenus = computed(() => store.state.login.userMenus)
+    console.log('userMenus', userMenus.value)
+
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    const handleOpen = () => {}
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    const handleClose = () => {}
+    return {
+      userMenus,
+      handleOpen,
+      handleClose
+    }
   }
 })
 </script>
