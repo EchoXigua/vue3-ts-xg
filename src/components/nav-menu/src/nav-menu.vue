@@ -19,7 +19,10 @@
               <span>{{ item.name }}</span>
             </template>
             <template v-for="subItem in item.children" :key="subItem.id">
-              <el-menu-item :index="subItem.id + ''">
+              <el-menu-item
+                :index="subItem.id + ''"
+                @click="MenuItemClick(subItem)"
+              >
                 <i v-if="subItem.icon" :class="subItem.icon"></i>
                 <span>{{ subItem.name }}</span>
               </el-menu-item>
@@ -46,6 +49,8 @@ import { defineComponent, computed } from 'vue'
 import { useStore } from '@/store/index'
 //vuex 对ts 兼容不太好
 
+import { useRouter } from 'vue-router'
+
 export default defineComponent({
   props: {
     collapse: {
@@ -54,6 +59,8 @@ export default defineComponent({
     }
   },
   setup(props) {
+    const router = useRouter()
+
     //useStore 可以接受一个泛型，用来约束store
     const store = useStore()
     // const userMenus = store.state.age
@@ -65,10 +72,17 @@ export default defineComponent({
     const handleOpen = () => {}
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     const handleClose = () => {}
+
+    const MenuItemClick = (item: any) => {
+      router.push({
+        path: item.url ?? 'not-found'
+      })
+    }
     return {
       userMenus,
       handleOpen,
-      handleClose
+      handleClose,
+      MenuItemClick
     }
   }
 })
