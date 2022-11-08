@@ -1,7 +1,7 @@
 <template>
   <div class="user">
     <div class="search">
-      <xg-form :formItems="formItems" />
+      <xg-form v-bind="searchConfig" />
     </div>
     <div class="content"></div>
   </div>
@@ -9,45 +9,15 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import XgForm, { IFormItem } from '@/base-ui/form/index'
+import XgForm from '@/base-ui/form/index'
+import { searchConfig } from './config/search.config'
 
 export default defineComponent({
   components: { XgForm },
   name: 'user',
   setup() {
-    const formItems: IFormItem[] = [
-      {
-        label: '用户名',
-        type: 'input',
-        placeholder: '请输入用户名'
-      },
-      {
-        label: '密码',
-        type: 'password',
-        placeholder: '请输入密码'
-      },
-      {
-        label: '爱好',
-        type: 'select',
-        placeholder: '请选择爱好',
-        options: [
-          { label: '篮球', value: '篮球' },
-          { label: '足球', value: '足球' }
-        ]
-      },
-      {
-        label: '时间',
-        type: 'datepicker',
-        placeholder: '请选择时间',
-        otherOptions: {
-          'start-placeholder': '开始日期',
-          'end-placeholder': '结束日期',
-          type: 'range'
-        }
-      }
-    ]
     return {
-      formItems
+      searchConfig
     }
   }
 })
