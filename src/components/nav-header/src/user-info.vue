@@ -1,9 +1,12 @@
 <template>
   <div>
     <el-dropdown>
-      <span class="el-dropdown-link">
-        <el-avatar size="small" :icon="UserFilled" />
-        <span>用户名</span>
+      <span class="user">
+        <el-avatar
+          size="small"
+          src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png"
+        />
+        <span>{{ name }}</span>
         <el-icon>
           <arrow-down />
         </el-icon>
@@ -25,7 +28,7 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, computed } from 'vue'
 import {
   ArrowDown,
   SwitchButton,
@@ -33,20 +36,24 @@ import {
   Tools,
   UserFilled
 } from '@element-plus/icons-vue'
+import { useStore } from '@/store/index'
 export default defineComponent({
   components: { ArrowDown, SwitchButton, User, Tools },
   setup() {
+    const store = useStore()
+    const name = computed(() => store.state.login.userInfo.name)
     return {
+      name,
       UserFilled
     }
   }
 })
 </script>
-<style scoped>
-.example-showcase .el-dropdown-link {
-  cursor: pointer;
-  color: var(--el-color-primary);
+<style lang="less" scoped>
+.user {
   display: flex;
+  justify-content: center;
   align-items: center;
+  cursor: pointer;
 }
 </style>
