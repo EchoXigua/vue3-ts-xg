@@ -1,6 +1,7 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import type { RouteRecordRaw } from 'vue-router'
 import localCache from '@/utils/cache'
+import { firstMenu } from '@/utils/map-menus'
 
 const routes: RouteRecordRaw[] = [
   {
@@ -41,6 +42,28 @@ router.beforeEach((to) => {
       return '/login'
     }
   }
+
+  if (to.path == '/main') {
+    return firstMenu.url
+  }
+
+  /**
+   * 刷新页面后，跳转notFound的原因：
+   */
+  // console.log('routes', router.getRoutes()) //有值
+  // console.log('to', to)
+  /**
+   * to:
+   *  fullPath: "/main/system/user"
+      hash: ""
+      href: "#/main/system/user"
+      matched: [{…}]
+      meta: {}
+      name: "not-found"   路径是对的，但是name匹配的组件时错的
+      params: {pathMatch: Array(3)}
+      path: "/main/system/user"
+      query: {}
+   */
 })
 
 export default router

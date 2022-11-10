@@ -5,7 +5,7 @@
       <div v-show="!collapse" class="title">Vue3+TS</div>
     </div>
     <el-menu
-      default-active="2"
+      :default-active="defaultValue"
       :collapse="collapse"
       class="el-menu-vertical-demo"
     >
@@ -15,7 +15,8 @@
           <!-- type == 1说明有子菜单 -->
           <el-sub-menu :index="item.id + ''">
             <template #title>
-              <i v-if="item.icon" :class="item.icon"></i>
+              <!-- <i v-if="item.icon" :class="item.icon"></i> -->
+              <el-icon><Platform /></el-icon>
               <span>{{ item.name }}</span>
             </template>
             <template v-for="subItem in item.children" :key="subItem.id">
@@ -44,14 +45,17 @@
 </template>
 <script lang="ts">
 import { IRootState } from '@/store/type'
-import { defineComponent, computed } from 'vue'
+import { defineComponent, computed, ref } from 'vue'
 //引用自己创建的useStore
 import { useStore } from '@/store/index'
 //vuex 对ts 兼容不太好
 
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
+import { Platform } from '@element-plus/icons-vue'
+import { pathMapToMenu } from '@/utils/map-menus'
 
 export default defineComponent({
+  components: { Platform },
   props: {
     collapse: {
       type: Boolean,
@@ -73,6 +77,13 @@ export default defineComponent({
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     const handleClose = () => {}
 
+    //刷新默认值处理，应该为动态的，这里通过路径去匹配menu，拿到id
+    const route = useRoute()
+    const currentPath = route.path
+    //computed 返回的值时一个ref对象
+    const menu = pathMapToMenu(userMenus.value, currentPath)
+    const defaultValue = ref(menu.id + '')
+
     const MenuItemClick = (item: any) => {
       router.push({
         path: item.url ?? 'not-found'
@@ -80,6 +91,7 @@ export default defineComponent({
     }
     return {
       userMenus,
+      defaultValue,
       handleOpen,
       handleClose,
       MenuItemClick

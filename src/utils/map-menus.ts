@@ -1,5 +1,8 @@
 import { RouteRecordRaw } from 'vue-router'
 
+//保存第一个菜单，在路由重定向的时候跳转到第一个菜单
+let firstMenu: any = null
+
 export function mapMenusToRoutes(userMenus: any[]): RouteRecordRaw[] {
   const routes: RouteRecordRaw[] = []
   //1.先加载默认所有的routes
@@ -23,6 +26,10 @@ export function mapMenusToRoutes(userMenus: any[]): RouteRecordRaw[] {
         //二级路由
         const route = allRoutes.find((route) => route.path === menu.url)
         if (route) routes.push(route)
+        if (!firstMenu) {
+          //保存第一个菜单
+          firstMenu = menu
+        }
       } else {
         recurseGetRoutes(menu.children)
       }
@@ -32,3 +39,23 @@ export function mapMenusToRoutes(userMenus: any[]): RouteRecordRaw[] {
 
   return routes
 }
+
+export function pathMapToMenu(userMenus: any[], currentPath: string): any {
+  for (const menu of userMenus) {
+    if (menu.type == 1) {
+      //一级菜单，需要遍历到二级菜单
+      //递归调用
+      //这里调用 pathMapToMenu(menu.children ?? [], currentPath)
+      //会有一个返回值
+
+      const findMenu = pathMapToMenu(menu.children ?? [], currentPath)
+      if (findMenu) {
+        return findMenu
+      }
+    } else if (menu.type == 2 && menu.url == currentPath) {
+      return menu
+    }
+  }
+}
+
+export { firstMenu }
