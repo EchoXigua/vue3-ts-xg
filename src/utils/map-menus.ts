@@ -1,3 +1,4 @@
+import { IBreadcrumb } from '@/base-ui/breadcrumb'
 import { RouteRecordRaw } from 'vue-router'
 
 //保存第一个菜单，在路由重定向的时候跳转到第一个菜单
@@ -40,7 +41,11 @@ export function mapMenusToRoutes(userMenus: any[]): RouteRecordRaw[] {
   return routes
 }
 
-export function pathMapToMenu(userMenus: any[], currentPath: string): any {
+export function pathMapToMenu(
+  userMenus: any[],
+  currentPath: string,
+  breadcrumbs?: any[]
+): any {
   for (const menu of userMenus) {
     if (menu.type == 1) {
       //一级菜单，需要遍历到二级菜单
@@ -50,12 +55,21 @@ export function pathMapToMenu(userMenus: any[], currentPath: string): any {
 
       const findMenu = pathMapToMenu(menu.children ?? [], currentPath)
       if (findMenu) {
+        //面包屑的处理，对地址栏路径
+        breadcrumbs?.push({ name: menu.name })
+        breadcrumbs?.push({ name: findMenu.name })
         return findMenu
       }
     } else if (menu.type == 2 && menu.url == currentPath) {
       return menu
     }
   }
+}
+
+export function pathMapBreadcrumbs(userMenus: any[], currentPath: string) {
+  const breadcrumbs: IBreadcrumb[] = []
+  pathMapToMenu(userMenus, currentPath, breadcrumbs)
+  return breadcrumbs
 }
 
 export { firstMenu }
