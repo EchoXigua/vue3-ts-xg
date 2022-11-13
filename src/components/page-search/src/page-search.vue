@@ -7,7 +7,7 @@
       <template #footer>
         <div class="footer">
           <el-button @click="reset">重置</el-button>
-          <el-button type="primary">搜索</el-button>
+          <el-button type="primary" @click="query">搜索</el-button>
         </div>
       </template>
     </xg-form>
@@ -24,8 +24,9 @@ export default defineComponent({
       required: true
     }
   },
+  emits: ['reset', 'query'],
   components: { XgForm },
-  setup(props) {
+  setup(props, { emit }) {
     const formItems = props.searchConfig?.formItems ?? []
     const formOriginData: any = {}
     for (const item of formItems) {
@@ -37,10 +38,16 @@ export default defineComponent({
       for (const key in formOriginData) {
         formData.value[`${key}`] = formOriginData[key]
       }
+      emit('reset')
+    }
+
+    const query = () => {
+      emit('query', formData.value)
     }
     return {
       formData,
-      reset
+      reset,
+      query
     }
   }
 })

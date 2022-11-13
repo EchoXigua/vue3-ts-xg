@@ -56,14 +56,17 @@ export default defineComponent({
   },
   setup(props) {
     const store = useStore()
-
-    store.dispatch('system/getPageListAction', {
-      pageName: props.pageName,
-      queryInfo: {
-        offset: 0,
-        size: 10
-      }
-    })
+    const getList = (queryInfo: any = {}) => {
+      store.dispatch('system/getPageListAction', {
+        pageName: props.pageName,
+        queryInfo: {
+          offset: 0,
+          size: 10,
+          ...queryInfo
+        }
+      })
+    }
+    getList()
 
     const dataList = computed(() =>
       store.getters['system/pageListData'](props.pageName)
@@ -72,7 +75,8 @@ export default defineComponent({
 
     return {
       dataList,
-      userCount
+      userCount,
+      getList
     }
   }
 })

@@ -9,8 +9,8 @@ export const searchConfig: IForm = {
       placeholder: '请输入用户名'
     },
     {
-      field: 'password',
-      label: '密码',
+      field: 'realname',
+      label: '真实姓名',
       type: 'password',
       placeholder: '请输入密码'
     },
