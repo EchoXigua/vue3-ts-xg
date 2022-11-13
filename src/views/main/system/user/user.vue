@@ -6,7 +6,7 @@
     <div class="content">
       <page-content
         :contentTableConfig="contentTableConfig"
-        pageName="user"
+        pageName="users"
       ></page-content>
     </div>
   </div>

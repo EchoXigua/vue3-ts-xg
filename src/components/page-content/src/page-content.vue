@@ -1,6 +1,6 @@
 <template>
   <div>
-    <xg-table :listData="userList" v-bind="contentTableConfig">
+    <xg-table :listData="dataList" v-bind="contentTableConfig">
       <template #headerHandle>
         <el-button type="primary">新建用户</el-button>
       </template>
@@ -65,11 +65,13 @@ export default defineComponent({
       }
     })
 
-    const userList = computed(() => store.state.system.userList)
-    const userCount = computed(() => store.state.system.userCount)
+    const dataList = computed(() =>
+      store.getters['system/pageListData'](props.pageName)
+    )
+    const userCount = computed(() => store.state.system.usersCount)
 
     return {
-      userList,
+      dataList,
       userCount
     }
   }

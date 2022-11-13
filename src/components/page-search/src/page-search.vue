@@ -6,7 +6,7 @@
       </template>
       <template #footer>
         <div class="footer">
-          <el-button>重置</el-button>
+          <el-button @click="reset">重置</el-button>
           <el-button type="primary">搜索</el-button>
         </div>
       </template>
@@ -25,15 +25,22 @@ export default defineComponent({
     }
   },
   components: { XgForm },
-  setup() {
-    const formData = ref({
-      name: '',
-      password: '',
-      hobby: '',
-      time: ''
-    })
+  setup(props) {
+    const formItems = props.searchConfig?.formItems ?? []
+    const formOriginData: any = {}
+    for (const item of formItems) {
+      formOriginData[item.field] = ''
+    }
+    const formData = ref(formOriginData)
+
+    const reset = () => {
+      for (const key in formOriginData) {
+        formData.value[`${key}`] = formOriginData[key]
+      }
+    }
     return {
-      formData
+      formData,
+      reset
     }
   }
 })
