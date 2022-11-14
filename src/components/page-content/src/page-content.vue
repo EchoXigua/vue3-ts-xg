@@ -1,6 +1,12 @@
 <template>
   <div>
-    <xg-table :listData="dataList" v-bind="contentTableConfig">
+    <xg-table
+      :listData="dataList"
+      :listCount="dataCount"
+      v-bind="contentTableConfig"
+      v-model:page="pageInfo"
+    >
+      <!-- v-model:page  起别名 -->
       <template #headerHandle>
         <el-button type="primary">新建用户</el-button>
       </template>
@@ -37,7 +43,7 @@
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, computed } from 'vue'
+import { defineComponent, computed, ref, watch } from 'vue'
 import XgTable from '@/base-ui/table/index'
 import { Delete, Edit } from '@element-plus/icons-vue'
 import { useStore } from '@/store'
@@ -56,12 +62,20 @@ export default defineComponent({
   },
   setup(props) {
     const store = useStore()
+
+    const pageInfo = ref({ currentPage: 0, pageSize: 10 })
+    //page 发生改变的时候，重新请求数据
+    watch(pageInfo, () => getList())
+
     const getList = (queryInfo: any = {}) => {
       store.dispatch('system/getPageListAction', {
         pageName: props.pageName,
         queryInfo: {
-          offset: 0,
-          size: 10,
+          offset:
+            pageInfo.value.currentPage == 0
+              ? pageInfo.value.currentPage * pageInfo.value.pageSize
+              : (pageInfo.value.currentPage - 1) * pageInfo.value.pageSize,
+          size: pageInfo.value.pageSize,
           ...queryInfo
         }
       })
@@ -71,12 +85,15 @@ export default defineComponent({
     const dataList = computed(() =>
       store.getters['system/pageListData'](props.pageName)
     )
-    const userCount = computed(() => store.state.system.usersCount)
+    const dataCount = computed(() =>
+      store.getters['system/pageListCount'](props.pageName)
+    )
 
     return {
       dataList,
-      userCount,
-      getList
+      dataCount,
+      getList,
+      pageInfo
     }
   }
 })

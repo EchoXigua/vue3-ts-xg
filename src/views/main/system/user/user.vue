@@ -23,7 +23,6 @@ import { searchConfig } from './config/search.config'
 import { contentTableConfig } from './config/content.config'
 import PageSearch from '@/components/page-search/index'
 import pageContent from '@/components/page-content'
-import PageContent from '@/components/page-content'
 
 import { usePageSearch } from '@/hooks/usePageSearch'
 
