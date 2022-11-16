@@ -49,8 +49,6 @@ console.log(process.env.VUE_APP_TEST)
 //   success: boolean
 // }
 
-//测试github desktop 代码回滚
-
 // xgRequest
 //   .request<DataType>({
 //     url: '/home/multidata',
