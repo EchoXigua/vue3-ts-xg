@@ -39,6 +39,19 @@
           >
         </div>
       </template>
+
+      <!-- 定制的插槽 -->
+      <template
+        v-for="item in otherPropSlots"
+        :key="item.prop"
+        #[item.slotName]="scope"
+      >
+        <!-- 这个地方slot 接受放入pageContent内的插槽，slot 将会插入到xg-table组件里面去-->
+        <!-- name是不确定的 ,通过row 把这里接受到的数据返回出去-->
+        <template v-if="item.slotName">
+          <slot :name="item.slotName" :row="scope.row"></slot>
+        </template>
+      </template>
     </xg-table>
   </div>
 </template>
@@ -62,11 +75,12 @@ export default defineComponent({
   },
   setup(props) {
     const store = useStore()
-
+    //1.双向绑定pageInfo
     const pageInfo = ref({ currentPage: 0, pageSize: 10 })
     //page 发生改变的时候，重新请求数据
     watch(pageInfo, () => getList())
 
+    //2.发送ajax
     const getList = (queryInfo: any = {}) => {
       store.dispatch('system/getPageListAction', {
         pageName: props.pageName,
@@ -82,6 +96,7 @@ export default defineComponent({
     }
     getList()
 
+    //3.从store中获取数据
     const dataList = computed(() =>
       store.getters['system/pageListData'](props.pageName)
     )
@@ -89,11 +104,23 @@ export default defineComponent({
       store.getters['system/pageListCount'](props.pageName)
     )
 
+    //4. 获取其他的动态插槽名称
+    const otherPropSlots = props.contentTableConfig.propList.filter(
+      (item: any) => {
+        if (item.slotName == 'status') return false
+        if (item.slotName == 'createAt') return false
+        if (item.slotName == 'updateAt') return false
+        if (item.slotName == 'handler') return false
+        return true
+      }
+    )
+
     return {
       dataList,
       dataCount,
       getList,
-      pageInfo
+      pageInfo,
+      otherPropSlots
     }
   }
 })
