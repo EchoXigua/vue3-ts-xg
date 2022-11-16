@@ -15,7 +15,7 @@ import localeCache from '@/utils/cache'
 //拿到router对象，往里面赋值菜单
 import router from '@/router/index'
 
-import { mapMenusToRoutes } from '@/utils/map-menus'
+import { mapMenusToRoutes, mapMenusToPermissions } from '@/utils/map-menus'
 
 //Module 接受两个泛型 第一个为自身store的类型， 第二个是总仓库的类型
 const loginModule: Module<ILoginState, IRootState> = {
@@ -24,7 +24,8 @@ const loginModule: Module<ILoginState, IRootState> = {
     return {
       token: '',
       userInfo: {},
-      userMenus: []
+      userMenus: [],
+      permissions: []
     }
   },
   mutations: {
@@ -43,6 +44,8 @@ const loginModule: Module<ILoginState, IRootState> = {
         //router身上添加route的方法
         router.addRoute('main', route)
       })
+
+      state.permissions = mapMenusToPermissions(userMenus)
     }
   },
   actions: {

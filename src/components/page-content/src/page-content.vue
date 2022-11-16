@@ -61,6 +61,8 @@ import XgTable from '@/base-ui/table/index'
 import { Delete, Edit } from '@element-plus/icons-vue'
 import { useStore } from '@/store'
 
+import { usePermission } from '@/hooks/usePermisson'
+
 export default defineComponent({
   components: { XgTable, Delete, Edit },
   props: {
@@ -75,6 +77,12 @@ export default defineComponent({
   },
   setup(props) {
     const store = useStore()
+
+    const isCreate = usePermission(props.pageName, 'create') //有没有create的权限 增加
+    const isUpdate = usePermission(props.pageName, 'update')
+    const isDelete = usePermission(props.pageName, 'delete')
+    const isQuery = usePermission(props.pageName, 'query')
+
     //1.双向绑定pageInfo
     const pageInfo = ref({ currentPage: 0, pageSize: 10 })
     //page 发生改变的时候，重新请求数据
@@ -120,7 +128,11 @@ export default defineComponent({
       dataCount,
       getList,
       pageInfo,
-      otherPropSlots
+      otherPropSlots,
+      isCreate,
+      isUpdate,
+      isDelete,
+      isQuery
     }
   }
 })

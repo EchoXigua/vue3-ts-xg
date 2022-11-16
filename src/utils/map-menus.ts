@@ -1,4 +1,5 @@
 import { IBreadcrumb } from '@/base-ui/breadcrumb'
+import menu from '@/router/main/system/menu/menu'
 import { RouteRecordRaw } from 'vue-router'
 
 //保存第一个菜单，在路由重定向的时候跳转到第一个菜单
@@ -70,6 +71,25 @@ export function pathMapBreadcrumbs(userMenus: any[], currentPath: string) {
   const breadcrumbs: IBreadcrumb[] = []
   pathMapToMenu(userMenus, currentPath, breadcrumbs)
   return breadcrumbs
+}
+
+export function mapMenusToPermissions(userMenus: any[]) {
+  const permission: string[] = []
+
+  //递归 来处理权限
+  const _recurseGetPermission = (menus: any[]) => {
+    for (const menu of menus) {
+      if (menu.type == 1 || menu.type == 2) {
+        // 1 2  第一层 第二层
+        _recurseGetPermission(menu.children ?? [])
+      } else if (menu.type == 3) {
+        permission.push(menu.permission)
+      }
+    }
+  }
+  _recurseGetPermission(userMenus)
+
+  return permission
 }
 
 export { firstMenu }
