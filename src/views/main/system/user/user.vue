@@ -25,7 +25,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { defineComponent } from 'vue'
 import { searchConfig } from './config/search.config'
 import { contentTableConfig } from './config/content.config'
 import PageSearch from '@/components/page-search/index'
@@ -43,7 +43,24 @@ export default defineComponent({
   setup() {
     const [pageContentRef, reset, query] = usePageSearch()
 
-    const [pageModalRef, defaultInfo, create, edit] = usePageModal()
+    const createNew = () => {
+      const passwordItem = modalConfig.formItems.find(
+        (item) => item.field == 'password'
+      )
+      passwordItem!.isHidden = false
+    }
+
+    const editNew = () => {
+      const passwordItem = modalConfig.formItems.find(
+        (item) => item.field == 'password'
+      )
+      passwordItem!.isHidden = true
+    }
+
+    const [pageModalRef, defaultInfo, create, edit] = usePageModal(
+      createNew,
+      editNew
+    )
 
     return {
       searchConfig,
