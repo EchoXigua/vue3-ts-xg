@@ -2,7 +2,7 @@ import { Module } from 'vuex'
 import type { ISystemState } from './types'
 import { IRootState } from '@/store/type'
 
-import { getPageListData } from '@/service/main/system/system'
+import { deletePageData, getPageListData } from '@/service/main/system/system'
 
 //Module 的第一个参数未state的类型，第二个为
 const systemModule: Module<ISystemState, IRootState> = {
@@ -97,6 +97,22 @@ const systemModule: Module<ISystemState, IRootState> = {
       //     commit('changeRoleCount', totalCount)
       //     break
       // }
+    },
+
+    async deletePageDataAction({ dispatch }, payload: any) {
+      // users/id
+      const { pageName, id } = payload
+      const pageUrl = `/${pageName}/${id}`
+      await deletePageData(pageUrl)
+
+      //重新请求数据
+      dispatch('getPageListAction', {
+        pageName,
+        queryInfo: {
+          offset: 0,
+          size: 10
+        }
+      })
     }
   }
 }

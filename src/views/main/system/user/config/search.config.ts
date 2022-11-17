@@ -11,7 +11,7 @@ export const searchConfig: IForm = {
     {
       field: 'realname',
       label: '真实姓名',
-      type: 'password',
+      type: 'input',
       placeholder: '请输入密码'
     },
     {

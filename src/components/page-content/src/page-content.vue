@@ -8,7 +8,9 @@
     >
       <!-- v-model:page  起别名 -->
       <template #headerHandle>
-        <el-button type="primary">新建用户</el-button>
+        <el-button v-if="isCreate" type="primary" @click="create"
+          >新建用户</el-button
+        >
       </template>
 
       <!-- 列插槽 -->
@@ -26,15 +28,27 @@
       <template #updateAt="scope">
         {{ $filter.formatTime(scope.row.updateAt) }}
       </template>
-      <template #action>
+      <template #action="scope">
         <div class="btns">
-          <el-button size="small" type="primary" link>
+          <el-button
+            v-if="isUpdate"
+            size="small"
+            type="primary"
+            link
+            @click="edit(scope.row)"
+          >
             <el-icon>
               <Edit />
             </el-icon>
             编辑</el-button
           >
-          <el-button size="small" type="primary" link>
+          <el-button
+            v-if="isDelete"
+            size="small"
+            type="primary"
+            link
+            @click="del(scope.row)"
+          >
             <el-icon> <Delete /> </el-icon>删除</el-button
           >
         </div>
@@ -75,7 +89,8 @@ export default defineComponent({
       required: true
     }
   },
-  setup(props) {
+  emits: ['create', 'edit'],
+  setup(props, { emit }) {
     const store = useStore()
 
     const isCreate = usePermission(props.pageName, 'create') //有没有create的权限 增加
@@ -84,7 +99,7 @@ export default defineComponent({
     const isQuery = usePermission(props.pageName, 'query')
 
     //1.双向绑定pageInfo
-    const pageInfo = ref({ currentPage: 0, pageSize: 10 })
+    const pageInfo = ref({ currentPage: 1, pageSize: 10 })
     //page 发生改变的时候，重新请求数据
     watch(pageInfo, () => getList())
 
@@ -118,10 +133,25 @@ export default defineComponent({
         if (item.slotName == 'status') return false
         if (item.slotName == 'createAt') return false
         if (item.slotName == 'updateAt') return false
-        if (item.slotName == 'handler') return false
+        if (item.slotName == 'action') return false
         return true
       }
     )
+
+    const create = () => {
+      emit('create')
+    }
+
+    const edit = (item: any) => {
+      emit('edit', item)
+    }
+
+    const del = (item: any) => {
+      store.dispatch('system/deletePageDataAction', {
+        pageName: props.pageName,
+        id: item.id
+      })
+    }
 
     return {
       dataList,
@@ -132,7 +162,10 @@ export default defineComponent({
       isCreate,
       isUpdate,
       isDelete,
-      isQuery
+      isQuery,
+      del,
+      create,
+      edit
     }
   }
 })
