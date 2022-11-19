@@ -4,6 +4,8 @@ import { ISystemState } from './main/system/types'
 export interface IRootState {
   name: string
   age: number
+  department: any[]
+  role: any[]
 }
 
 //因为vuex 类型不能结合模块,所以弄各个模块的类型，在这里

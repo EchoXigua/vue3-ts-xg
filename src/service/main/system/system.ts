@@ -13,3 +13,17 @@ export function deletePageData(url: string) {
     url
   })
 }
+
+export function createPageData(url: string, newData: any) {
+  return xgRequest.post<IDataType>({
+    url,
+    data: newData
+  })
+}
+
+export function editPageData(url: string, editData: any) {
+  return xgRequest.patch<IDataType>({
+    url,
+    data: editData
+  })
+}

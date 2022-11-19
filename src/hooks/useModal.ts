@@ -15,7 +15,6 @@ export function usePageModal(newFn?: CallbackFn, editFn?: CallbackFn) {
   const edit = (item: any) => {
     //让弹窗显示
     pageModalRef.value!.dialogVisible = true
-    console.log(item)
     defaultInfo.value = { ...item } //浅拷贝
     editFn && editFn()
   }

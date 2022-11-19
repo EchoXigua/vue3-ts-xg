@@ -7,13 +7,11 @@
       destroy-on-close
       center
     >
-      <xg-form v-bind="modalConfig" :modelValue="formData"></xg-form>
+      <xg-form v-bind="modalConfig" v-model="formData"></xg-form>
       <template #footer>
         <span class="dialog-footer">
           <el-button @click="dialogVisible = false">取消</el-button>
-          <el-button type="primary" @click="dialogVisible = false">
-            确认
-          </el-button>
+          <el-button type="primary" @click="confirm"> 确认 </el-button>
         </span>
       </template>
     </el-dialog>
@@ -24,6 +22,8 @@ import { defineComponent, ref, watch } from 'vue'
 
 import XgForm from '@/base-ui/form/index'
 
+import { useStore } from '@/store'
+
 export default defineComponent({
   props: {
     modalConfig: {
@@ -33,6 +33,10 @@ export default defineComponent({
     defaultInfo: {
       type: Object,
       default: () => ({})
+    },
+    pageName: {
+      type: String,
+      required: true
     }
   },
   components: { XgForm },
@@ -50,9 +54,29 @@ export default defineComponent({
       { deep: true }
     )
 
+    const store = useStore()
+    const confirm = () => {
+      dialogVisible.value = false
+      if (Object.keys(props.defaultInfo).length) {
+        //编辑
+        store.dispatch('system/editPageDataAction', {
+          pageName: props.pageName,
+          editData: { ...formData.value },
+          id: props.defaultInfo.id
+        })
+      } else {
+        //新增
+        store.dispatch('system/createPageDataAction', {
+          pageName: props.pageName,
+          newData: { ...formData.value }
+        })
+      }
+    }
+
     return {
       dialogVisible,
-      formData
+      formData,
+      confirm
     }
   }
 })

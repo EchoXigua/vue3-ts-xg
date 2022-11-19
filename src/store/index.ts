@@ -4,15 +4,45 @@ import { IRootState, IStoreType } from './type'
 import login from './login/login'
 import system from './main/system/system'
 
+import { getPageListData } from '@/service/main/system/system'
+
 const store = createStore<IRootState>({
   state: () => {
     return {
       name: 'xigua',
-      age: 15
+      age: 15,
+      department: [],
+      role: []
     }
   },
-  mutations: {},
-  actions: {},
+  mutations: {
+    changeDepartment(state, list) {
+      state.department = list
+    },
+    changeRole(state, list) {
+      state.role = list
+    }
+  },
+  actions: {
+    async getInitDataAction({ commit }) {
+      const departRes = await getPageListData('/department/list', {
+        offset: 0,
+        size: 100
+      })
+      const { list: departList } = departRes.data
+
+      const roleRes = await getPageListData('/role/list', {
+        offset: 0,
+        size: 100
+      })
+
+      const { list: roleList } = roleRes.data
+
+      commit('changeDepartment', departList)
+
+      commit('changeRole', roleList)
+    }
+  },
   modules: {
     login,
     system
@@ -22,6 +52,8 @@ const store = createStore<IRootState>({
 export function setupStore() {
   //
   store.dispatch('login/loadLocalLogin')
+
+  store.dispatch('getInitDataAction')
 }
 
 export function useStore(): Store<IStoreType> {
