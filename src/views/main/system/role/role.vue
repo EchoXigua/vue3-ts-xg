@@ -7,7 +7,15 @@
       <page-content
         :content-table-config="contentTableConfig"
         page-name="role"
+        @create="create"
+        @edit="edit"
       ></page-content>
+      <page-modal
+        ref="pageModalRef"
+        :defaultInfo="defaultInfo"
+        :modalConfig="modalConfig"
+        pageName="role"
+      ></page-modal>
     </div>
   </div>
 </template>
@@ -19,13 +27,26 @@ import { contentTableConfig } from './config/content.config'
 import PageSearch from '@/components/page-search'
 import { searchConfig } from './config/search.config'
 
+import PageModal from '@/components/page-modal'
+import { modalConfig } from './config/modal.config'
+
+import { usePageModal } from '@/hooks/useModal'
+
 export default defineComponent({
   name: 'role',
-  components: { PageContent, PageSearch },
+  components: { PageContent, PageSearch, PageModal },
   setup() {
+    //3.调用hook获取公共变量和函数
+    const [pageModalRef, defaultInfo, create, edit] = usePageModal()
+
     return {
       contentTableConfig,
-      searchConfig
+      searchConfig,
+      modalConfig,
+      pageModalRef,
+      defaultInfo,
+      create,
+      edit
     }
   }
 })

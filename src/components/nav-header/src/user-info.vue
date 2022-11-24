@@ -13,7 +13,7 @@
       </span>
       <template #dropdown>
         <el-dropdown-menu>
-          <el-dropdown-item
+          <el-dropdown-item @click="exit"
             ><el-icon><SwitchButton /></el-icon>退出登录</el-dropdown-item
           >
           <el-dropdown-item divided
@@ -37,14 +37,24 @@ import {
   UserFilled
 } from '@element-plus/icons-vue'
 import { useStore } from '@/store/index'
+import localCache from '@/utils/cache'
+import { useRouter } from 'vue-router'
+
 export default defineComponent({
   components: { ArrowDown, SwitchButton, User, Tools },
   setup() {
     const store = useStore()
     const name = computed(() => store.state.login.userInfo.name)
+
+    const router = useRouter()
+    const exit = () => {
+      localCache.deleteCache('token')
+      router.push('/main')
+    }
     return {
       name,
-      UserFilled
+      UserFilled,
+      exit
     }
   }
 })

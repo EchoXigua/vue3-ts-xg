@@ -49,12 +49,16 @@ const loginModule: Module<ILoginState, IRootState> = {
     }
   },
   actions: {
-    async accountLoginAction({ commit }, payload: IAccount) {
+    async accountLoginAction({ commit, dispatch }, payload: IAccount) {
       //1.登录逻辑
       const res = await accountLoginRequest(payload)
       const { id, token } = res.data
       commit('changeToken', token)
       localeCache.setCache('token', token)
+
+      //发送初始化的请求(完整的role/department)
+
+      dispatch('getInitDataAction', null, { root: true }) //调用根里面的action
 
       //2.请求用户信息
       const userInfoResult = await requestUserInfoById(id)
@@ -73,11 +77,14 @@ const loginModule: Module<ILoginState, IRootState> = {
       router.push('/main')
     },
 
-    loadLocalLogin({ commit }) {
+    loadLocalLogin({ commit, dispatch }) {
       const token = localeCache.getCache('token')
       if (token) {
         //如果token存在的话
         commit('changeToken', token)
+
+        //本地加载  刷新操作
+        dispatch('getInitDataAction', null, { root: true }) //调用根里面的action
       }
       const userInfo = localeCache.getCache('userInfo')
       if (userInfo) {
