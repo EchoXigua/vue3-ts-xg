@@ -1,7 +1,7 @@
 import { ref } from 'vue'
 import PageModal from '@/components/page-modal'
 
-type CallbackFn = () => void
+type CallbackFn = (item?: any) => void
 export function usePageModal(newFn?: CallbackFn, editFn?: CallbackFn) {
   const pageModalRef = ref<InstanceType<typeof PageModal>>()
   const defaultInfo = ref({})
@@ -16,7 +16,7 @@ export function usePageModal(newFn?: CallbackFn, editFn?: CallbackFn) {
     //让弹窗显示
     pageModalRef.value!.dialogVisible = true
     defaultInfo.value = { ...item } //浅拷贝
-    editFn && editFn()
+    editFn && editFn(item)
   }
 
   return [pageModalRef, defaultInfo, create, edit]
