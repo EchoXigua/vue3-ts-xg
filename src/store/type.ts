@@ -1,4 +1,5 @@
 import { ILoginState } from './login/type'
+import { IDashboard } from './main/analysis/types'
 import { ISystemState } from './main/system/types'
 
 export interface IRootState {
@@ -13,6 +14,7 @@ export interface IRootState {
 export interface IRootWithModule {
   login: ILoginState
   system: ISystemState
+  dashborad: IDashboard
 }
 
 //将模块的类型 和state的类型结合起来，变成自己的store类型
