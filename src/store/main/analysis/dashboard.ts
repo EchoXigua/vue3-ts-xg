@@ -37,7 +37,6 @@ const dashboardModule: Module<IDashboard, IRootState> = {
   actions: {
     async getDashboardDataAction({ commit }) {
       const categoryCountRes = await getCategoryGoodsCount()
-      console.log(categoryCountRes)
       commit('changeCategoryGoodsCount', categoryCountRes.data)
 
       const categorySaleRes = await getCategoryGoodsSale()

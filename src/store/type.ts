@@ -14,7 +14,7 @@ export interface IRootState {
 export interface IRootWithModule {
   login: ILoginState
   system: ISystemState
-  dashborad: IDashboard
+  dashboard: IDashboard
 }
 
 //将模块的类型 和state的类型结合起来，变成自己的store类型
