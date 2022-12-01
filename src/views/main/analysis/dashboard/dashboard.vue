@@ -7,7 +7,9 @@
         </xg-card>
       </el-col>
       <el-col :span="10">
-        <xg-card title="不同城市商品销量"></xg-card>
+        <xg-card title="不同城市商品销量">
+          <map-echart :mapData="addressGoodsSale"></map-echart>
+        </xg-card>
       </el-col>
       <el-col :span="7">
         <xg-card title="分类商品数量（玫瑰图）">
@@ -40,12 +42,20 @@ import {
   PieEchart,
   RoseEchart,
   LineEchart,
-  BarEchart
+  BarEchart,
+  MapEchart
 } from '@/components/page-echarts'
 
 export default defineComponent({
   name: 'dashboard',
-  components: { XgCard, PieEchart, RoseEchart, LineEchart, BarEchart },
+  components: {
+    XgCard,
+    PieEchart,
+    RoseEchart,
+    LineEchart,
+    BarEchart,
+    MapEchart
+  },
   setup() {
     const store = useStore()
     //请求数据
@@ -86,10 +96,19 @@ export default defineComponent({
       }
     })
 
+    const addressGoodsSale = computed(() => {
+      return store.state.dashboard.addressGoodsSale.map((item: any) => {
+        return {
+          name: item.address,
+          value: item.count
+        }
+      })
+    })
     return {
       categoryGoodsCount,
       categoryGoodsSale,
-      categoryGoodsFavor
+      categoryGoodsFavor,
+      addressGoodsSale
     }
   }
 })
