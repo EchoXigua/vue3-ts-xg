@@ -43,9 +43,9 @@ cp -a "../${siteSource}/." .
 ls -la
 
 # 把所有的文件添加到 git
-git add -a
+git add -A
 # 添加一条提交内容
-git commit --allow-emptu -m "Deploy to Github pages [ci skip]"
+git commit --allow-empty -m "Deploy to Github pages [ci skip]"
 
 # 推送文件
 git push --force --quiet origin gh-pages
