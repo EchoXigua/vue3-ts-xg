@@ -11,10 +11,26 @@ jobs:
           fingerprints:
             - "06:fb:8b:f9:bc:57:08:c1:6b:c2:50:89:60:db:02:56"
       - checkout
+      - restore_cache:
+          keys:
+            - dependen
       - run: echo "A first hello"
       - run:
           name: Install
           command: npm install
+      - save_cache:
+          paths:
+            - node_modules
+          key: dependen
+
       - run:
           name: Build
           command: npm run build
+      - run:
+          name: Prepare shell commands
+          # shell chmod +x 赋予执行权限
+          # z执行shell脚本
+          command: chmod +x scripts/deploy.sh
+      - run:
+          name: Run Deploy to Github pages
+          command: ./scripts/deploy.sh
