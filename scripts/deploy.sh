@@ -15,9 +15,17 @@ cd gh-pages-branch
 echo 'test'
 # 设置发布的用户名和邮箱
 git config --global user.email "$GH_EMAIL" >/
+
+echo 'test2'
 dev/null 2>&1
+
+echo 'test3'
 git config --global user.name "$GH_NAME" >/
+
+echo 'test4'
 dev/null 2>&1
+
+echo 'test5'
 git init
 git remote add --fetch origin "$remote"
 
