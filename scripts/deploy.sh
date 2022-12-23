@@ -14,18 +14,11 @@ cd gh-pages-branch
 # 创建的一个新的仓库
 echo 'test'
 # 设置发布的用户名和邮箱
-git config --global user.email "$GH_EMAIL" >/
-
-echo 'test2'
-dev/null 2>&1
-
-echo 'test3'
-git config --global user.name "$GH_NAME" >/
-
-echo 'test4'
-dev/null 2>&1
-
-echo 'test5'
+echo 'email is: '$GH_EMAIL
+git config --global user.email "$GH_EMAIL" 
+# dev/null 2>&1
+git config --global user.name "$GH_NAME" 
+# dev/null 2>&1
 git init
 git remote add --fetch origin "$remote"
 
