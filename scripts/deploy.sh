@@ -9,8 +9,8 @@ remote=$(git config remote.origin.url)
 echo 'remote is: '$remote
 
 # 新建一个发布的目录
-mkdir gh-pages-branch
-cd gh-pages-branch
+# mkdir gh-pages-branch
+# cd gh-pages-branch
 # 创建的一个新的仓库
 
 # 设置发布的用户名和邮箱
