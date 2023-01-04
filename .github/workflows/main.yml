@@ -1,5 +1,11 @@
 name: Build and Deploy
-on: [push]
+on:
+  # on: [push] 这是原来的
+  # 下面是现在的，可以在GitHub actions 中手动触发，不同在提交代码
+  push:
+    branches: [master]
+  workflow_dispatch:
+
 permissions:
   contents: write
 jobs:
