@@ -25,3 +25,14 @@ jobs:
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           folder: build # The folder the action should deploy.
+          
+      - name: rsync deployments
+        uses: burnett01/rsync-deployments@5.2.1
+        with:
+          switches: -avzr --delete
+          path: build/
+          remote_path: /home/demo-site
+          remote_host: 43.139.245.195
+          remote_port: 22
+          remote_user: root
+          remote_key: ${{ secrets.SERVER_ZHH_KEY }}
