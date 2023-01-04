@@ -2,8 +2,7 @@ module.exports = {
   outputDir: './build',
 
   //配置 通过GitHub pages 部署的话会多一个前缀
-  // transpileDependencies: true,
-  publicPath: '/vue3-ts-xg',
+  // publicPath: '/vue3-ts-xg',
   devServer: {
     proxy: {
       '^/api': {
