@@ -36,3 +36,13 @@ jobs:
           remote_port: 22
           remote_user: root
           remote_key: ${{ secrets.SERVER_ZHH_KEY }}
+      - name: rsync deployments vue3-ts-xg
+        uses: burnett01/rsync-deployments@5.2.1
+        with:
+          switches: -avzr --delete
+          path: build/
+          remote_path: /home/demo-site/vue3-ts-xg
+          remote_host: ${{ secrets.SERVER_ZHH_IP }}
+          remote_port: 22
+          remote_user: root
+          remote_key: ${{ secrets.SERVER_ZHH_KEY }}
