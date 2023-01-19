@@ -1,6 +1,11 @@
 name: Mirror to Gitlab Repo
 
-on: [ push ]
+on:
+  # on: [push] 这是原来的
+  # 下面是现在的，可以在GitHub actions 中手动触发，不同在提交代码
+  push:
+    branches: [master]
+  workflow_dispatch:
 
 # Ensures that only one mirror task will run at a time.
 concurrency:
