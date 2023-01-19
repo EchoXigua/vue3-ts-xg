@@ -15,4 +15,4 @@ jobs:
           SSH_PRIVATE_KEY: ${{ secrets.GITLAB_DEPLOY_KEY }}
         with:
           source-repo: "git@github.com:EchoXigua/vue3-ts-xg.git"
-          destination-repo: "ssh://git@1.12.36.97:13822/front-end/vue3-ts-xg.git"
+          destination-repo: "git@1.12.36.97:13822/front-end/vue3-ts-xg.git"
